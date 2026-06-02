@@ -8,7 +8,7 @@ A full-stack clothing e-commerce app with an Express backend and a React fronten
 testsite/
 ├── backend/          # Express REST API
 ├── frontend/         # React + Vite storefront (Express server in production)
-├── render.yaml       # Render Blueprint (two Web Services)
+├── render.yaml       # Render Blueprint (single Web Service)
 └── package.json      # Local dev scripts
 ```
 
@@ -114,7 +114,7 @@ Use the settings from the table above. Click **Create Web Service**.
 
 - **Backend:** Node.js 20+, Express, CORS
 - **Frontend:** React 18, React Router, Vite, Express (production server)
-- **Hosting:** Render.com (two Web Services)
+- **Hosting:** Render.com (single Web Service)
 
 ## Environment Variables
 
