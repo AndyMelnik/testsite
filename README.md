@@ -69,67 +69,35 @@ git push -u origin main
 
 ## Deploy to Render.com
 
-The app uses **two Web Services** on Render:
+The app runs as **one Web Service** on Render — the backend serves both the API and the React frontend from the same URL.
 
-| Service | Type | Purpose |
-|---------|------|---------|
-| `threadline-store` | Web Service | React frontend served by Express |
-| `threadline-api` | Web Service | Express API |
+| Setting | Value |
+|---------|-------|
+| **Root Directory** | *(leave empty — repo root)* |
+| **Build Command** | `npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend` |
+| **Start Command** | `npm start --prefix backend` |
+| **Health Check Path** | `/api/health` |
+
+Environment variables:
+
+| Key | Value |
+|-----|-------|
+| `NODE_ENV` | `production` |
+
+No `VITE_API_URL` needed — the frontend uses `/api` on the same domain.
 
 ### Option A — Blueprint (recommended)
 
 1. Push the repo to GitHub (see above).
 2. In [Render Dashboard](https://dashboard.render.com/) → **New** → **Blueprint**.
 3. Connect your GitHub repository.
-4. Render reads `render.yaml` and creates both services automatically.
-5. After the first deploy finishes, click **Manual Deploy → Deploy latest commit** once more if the storefront was built before the API URL was available.
-
-The Blueprint wires environment variables automatically:
-
-- `VITE_API_URL` on the storefront → API public URL (used at build time)
-- `FRONTEND_URL` on the API → storefront public URL (for CORS)
+4. Render reads `render.yaml` and creates one Web Service automatically.
 
 ### Option B — Manual setup
 
-#### 1. Deploy the API (Web Service)
+**New + → Web Service → Connect `AndyMelnik/testsite`**
 
-| Setting | Value |
-|---------|-------|
-| Root Directory | `backend` |
-| Runtime | Node |
-| Build Command | `npm ci` |
-| Start Command | `npm start` |
-| Health Check Path | `/api/health` |
-
-Environment variables:
-
-| Key | Value |
-|-----|-------|
-| `NODE_ENV` | `production` |
-| `FRONTEND_URL` | Your storefront URL (add after step 2) |
-
-#### 2. Deploy the storefront (Web Service)
-
-| Setting | Value |
-|---------|-------|
-| Root Directory | `frontend` |
-| Runtime | Node |
-| Build Command | `npm ci && npm run build` |
-| Start Command | `npm start` |
-| Health Check Path | `/health` |
-
-Environment variables:
-
-| Key | Value |
-|-----|-------|
-| `NODE_ENV` | `production` |
-| `VITE_API_URL` | `https://your-api-name.onrender.com` (no trailing slash) |
-
-The Express server in `frontend/server.js` serves the built React app and handles SPA routing — no redirect rules needed.
-
-#### 3. Update CORS on the API
-
-Go back to the API service and set `FRONTEND_URL` to your storefront URL, then redeploy the API.
+Use the settings from the table above. Click **Create Web Service**.
 
 ## API Endpoints
 

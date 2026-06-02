@@ -1,39 +1,14 @@
-# Render Blueprint — deploy both services from one GitHub repo.
+# Render Blueprint — single Web Service (API + frontend on one URL).
 # Dashboard: New > Blueprint > connect this repository.
 
 services:
-  # Backend API (Web Service)
   - type: web
-    name: threadline-api
+    name: testsite
     runtime: node
-    rootDir: backend
     plan: free
-    buildCommand: npm ci
-    startCommand: npm start
+    buildCommand: npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend
+    startCommand: npm start --prefix backend
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
-      - key: FRONTEND_URL
-        fromService:
-          type: web
-          name: threadline-store
-          envVarKey: RENDER_EXTERNAL_URL
-
-  # Frontend (Web Service)
-  - type: web
-    name: threadline-store
-    runtime: node
-    rootDir: frontend
-    plan: free
-    buildCommand: npm ci && npm run build
-    startCommand: npm start
-    healthCheckPath: /health
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: VITE_API_URL
-        fromService:
-          type: web
-          name: threadline-api
-          envVarKey: RENDER_EXTERNAL_URL
