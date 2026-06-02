@@ -74,8 +74,8 @@ The app runs as **one Web Service** on Render — the backend serves both the AP
 | Setting | Value |
 |---------|-------|
 | **Root Directory** | *(leave empty — repo root)* |
-| **Build Command** | `npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend` |
-| **Start Command** | `npm start --prefix backend` |
+| **Build Command** | `npm run build:render` |
+| **Start Command** | `npm start` |
 | **Health Check Path** | `/api/health` |
 
 Environment variables:
